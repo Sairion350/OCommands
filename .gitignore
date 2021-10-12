@@ -1,0 +1,10 @@
+/.vscode/launch.json
+/.vscode/tasks.json
+/meta.ini
+SkyrimSE.code-workspace
+*.ppj
+*.zip
+*.pex
+*.bat
+*.ps1
+!OStim_CI.ppj
