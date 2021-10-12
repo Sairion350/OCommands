@@ -13,8 +13,28 @@ Event CMD_Help(string args)
 	Console("Check OCommandsScript for all commands")
 EndEvent
 
+Event CMD_QStart(string args)
+	{Usage - ostim qstart [m/f] - spawn a copy of a male or female npc and start a scene with them}
+	string[] arg = StringSplit(args, ",")
+
+	int female = 0x1A69A ;ysolda 
+	int male = 0x1A6A4 ; nazeem
+
+	int with = female 
+
+	if arg[0] == "m" 
+		with = male 
+	elseif arg[0] == "f"
+		with = female 
+	endif 
+
+	actor spawned = PlayerRef.PlaceActorAtMe(outils.GetNPC(with).GetLeveledActorBase())
+
+	ostim.startscene(playerref, spawned )
+EndEvent
+
 Event CMD_info(string args)
-{Dumps a large of OStim's internal state to console}
+{Dumps a large amount of OStim's internal state to console}
 	Console("   ___     _   _           ")
 	Console("  /___\\___| |_(_)_ __ ___  ")
 	Console(" //  // __| __| | '_ ` _ \\ ")
