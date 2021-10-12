@@ -13,6 +13,36 @@ Event CMD_Help(string args)
 	Console("Check OCommandsScript for all commands")
 EndEvent
 
+Event CMD_Orgasm(string args)
+	{Usage - ostim qstart [dom/sub/third] - Orgasm. Defaults to player if no arg}
+	string[] arg = StringSplit(args, ",")
+
+	if !ostim.AnimationRunning()
+		Console("No scene running")
+		return 
+	endif 
+
+	actor who
+
+	if arg[0] == "dom" 
+		who = ostim.GetDomActor()
+	elseif arg[0] == "sub"
+		who = ostim.GetSubActor()
+	elseif arg[0] == "third"
+		who = ostim.GetThirdActor()
+	else 
+		if ostim.IsPlayerInvolved()
+			who = PlayerRef
+		else 
+			Console("Error: cannot default orgasm to player because player is not involved")
+		endif 
+	endif 
+
+	ostim.SetActorExcitement(who, 110.0)
+
+	Console("Making " + who.GetDisplayName() + " orgasm")
+EndEvent
+
 Event CMD_QStart(string args)
 	{Usage - ostim qstart [m/f] - spawn a copy of a male or female npc and start a scene with them}
 	string[] arg = StringSplit(args, ",")
@@ -46,6 +76,7 @@ Event CMD_info(string args)
 	Console(">")
 	Console(">")
 	Console(">	Running: " + ostim.AnimationRunning())
+	Console(">	Main Excitement mult: " + ostim.SexExcitementMult)
 	Console(">	Aggressive: " + ostim.IsSceneAggressiveThemed())
 	Console(">	Aggressor: " + ostim.GetAggressiveActor().GetDisplayName() + " (" + ostim.GetAggressiveActor() + ")")
 	Console(">")
