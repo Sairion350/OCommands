@@ -15,7 +15,35 @@ Event CMD_Help(string args)
 	Console("Check OCommandsScript for all commands")
 EndEvent
 
+Event CMD_SetExc(string args)
+	{Usage - ostim SetExc (float) [(actra)] - Set excitement to the given number. Defaults to player if no arg}
 
+	string[] arg = StringSplit(args, ",")
+
+	if !ostim.AnimationRunning()
+		Console("No scene running")
+		return 
+	endif 
+
+	float newValue = arg[0] as float  
+
+	actor who
+	if arg.Length > 1 
+		who = StringToActra(arg[1])
+	endif 
+
+	if !who 
+		who = PlayerRef
+	endif 
+
+	ostim.SetActorExcitement(who, newValue)
+
+	Console("Setting " + who.GetDisplayName() + " excitement to " + newValue)
+EndEvent 
+
+	Event CMD_SEC(string args) ; ALIAS
+		CMD_SetExc(args)
+	EndEvent
 
 Event CMD_Restart(string args)
 	{Restart the current OStim scene. If none is running, starts the last one again}
