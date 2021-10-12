@@ -15,6 +15,23 @@ Event CMD_Help(string args)
 	Console("Check OCommandsScript for all commands")
 EndEvent
 
+Event CMD_ToggleStim(string args)
+	{Toggles the stimulation sim on and off}
+
+	if ostim.DisableStimulationCalculation
+		console("Stimulation is now ON")
+	else 
+		console("Stimulation is now OFF")
+	endif 
+
+	ostim.DisableStimulationCalculation = !ostim.DisableStimulationCalculation
+EndEvent 
+
+	Event CMD_TST(string args) ; ALIAS
+		CMD_ToggleStim(args)
+	EndEvent
+
+
 Event CMD_SetExc(string args)
 	{Usage - ostim SetExc (float) [(actra)] - Set excitement to the given number. Defaults to player if no arg}
 
