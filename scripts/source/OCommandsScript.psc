@@ -6,7 +6,7 @@ import PapyrusUtil
 ; Call things in the console like: ostim info
 ; args should be a csv list
 ; Go wild and add whatever you want here
-; Hard req. for now: https://www.nexusmods.com/skyrimspecialedition/mods/52964
+; Hard req. for now: https://www.nexusmods.com/skyrimspecialedition/mods/52964 
 
 
 Event CMD_Help(string args)
