@@ -8,13 +8,38 @@ import PapyrusUtil
 ; Go wild and add whatever you want here
 ; Hard req. for now: https://www.nexusmods.com/skyrimspecialedition/mods/52964 
 
+ ;(actra) = One of the following: dom/sub/third/player
+ ; [] = optional argument
 
 Event CMD_Help(string args)
 	Console("Check OCommandsScript for all commands")
 EndEvent
 
+
+
+Event CMD_Restart(string args)
+	{Restart the current OStim scene. If none is running, starts the last one again}
+	string[] arg = StringSplit(args, ",")
+
+	if ostim.AnimationRunning()
+		ostim.EndAnimation(false)
+		while ostim.AnimationRunning()
+			Utility.waitmenumode(0.01)
+		endwhile 
+	endif 
+
+	actor[] people = ostim.GetActors()
+	while people.Length < 3 
+		people = PushActor(people, none)
+	endwhile 
+
+
+	ostim.startscene(people[0], people[1], zthirdactor=people[2])
+EndEvent 
+
+
 Event CMD_Orgasm(string args)
-	{Usage - ostim qstart [dom/sub/third] - Orgasm. Defaults to player if no arg}
+	{Usage - ostim qstart [(actra)] - Orgasm. Defaults to player if no arg}
 	string[] arg = StringSplit(args, ",")
 
 	if !ostim.AnimationRunning()
@@ -22,19 +47,14 @@ Event CMD_Orgasm(string args)
 		return 
 	endif 
 
-	actor who
+	actor who = StringToActra(arg[0])
 
-	if arg[0] == "dom" 
-		who = ostim.GetDomActor()
-	elseif arg[0] == "sub"
-		who = ostim.GetSubActor()
-	elseif arg[0] == "third"
-		who = ostim.GetThirdActor()
-	else 
+	if !who 
 		if ostim.IsPlayerInvolved()
 			who = PlayerRef
 		else 
 			Console("Error: cannot default orgasm to player because player is not involved")
+			Return
 		endif 
 	endif 
 
@@ -183,4 +203,20 @@ string Function GetSexString(actor[] acts)
 	EndWhile
 
 	return ret
+EndFunction
+
+actor Function StringToActra(string in)
+	if in == "dom" 
+		return ostim.GetDomActor()
+	elseif in == "sub"
+		return ostim.GetSubActor()
+	elseif in == "third"
+		return ostim.GetThirdActor()
+	elseif in == "player"
+		return playerref
+	else 
+		return none
+	endif 
+
+
 EndFunction
