@@ -31,6 +31,35 @@ EndEvent
 		CMD_ToggleStim(args)
 	EndEvent
 
+Event CMD_SetExcMult(string args)
+	{Usage - ostim SetExcMult (float) [(actra)] - Set actor's excitement multiplier to the given number. Changes the global mult instead if no actor given}
+
+	string[] arg = StringSplit(args, ",")
+
+	if !ostim.AnimationRunning()
+		Console("No scene running")
+		return 
+	endif 
+
+	float newValue = arg[0] as float  
+
+	actor who
+	if arg.Length > 1 
+		who = StringToActra(arg[1])
+	endif 
+
+	if !who 
+		Console("Setting GLOBAL excitement mult to " + newValue)
+		ostim.SexExcitementMult = newValue
+	else 
+		ostim.SetStimMult(who, newValue)
+		Console("Setting " + who.GetDisplayName() + " excitement mult to " + newValue)
+	endif 
+EndEvent 
+
+	Event CMD_SEM(string args) ; ALIAS
+		CMD_SetExcMult(args)
+	EndEvent 
 
 Event CMD_SetExc(string args)
 	{Usage - ostim SetExc (float) [(actra)] - Set excitement to the given number. Defaults to player if no arg}
