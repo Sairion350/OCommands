@@ -113,7 +113,7 @@ EndEvent
 
 
 Event CMD_Orgasm(string args)
-	{Usage - ostim qstart [(actra)] - Orgasm. Defaults to player if no arg}
+	{Usage - ostim qstart [(actra)] - Orgasm. Defaults to Dom if no arg}
 	string[] arg = StringSplit(args, ",")
 
 	if !ostim.AnimationRunning()
@@ -125,7 +125,7 @@ Event CMD_Orgasm(string args)
 
 	if !who 
 		if ostim.IsPlayerInvolved()
-			who = PlayerRef
+			who = ostim.GetDomActor()
 		else 
 			Console("Error: cannot default orgasm to player because player is not involved")
 			Return
