@@ -138,7 +138,7 @@ Event CMD_Orgasm(string args)
 EndEvent
 
 Event CMD_QStart(string args)
-	{Usage - ostim qstart [m/f] - spawn a copy of a male or female npc and start a scene with them}
+	{Usage - ostim qstart [m/f/npc] - spawn a copy of a male or female npc and start a scene with them, or start an npc scene}
 	string[] arg = StringSplit(args, ",")
 
 	int female = 0x1A69A ;ysolda 
@@ -150,6 +150,12 @@ Event CMD_QStart(string args)
 		with = male 
 	elseif arg[0] == "f"
 		with = female 
+	elseif arg[0] == "npc"
+		actor a  = PlayerRef.PlaceActorAtMe(outils.GetNPC(male).GetLeveledActorBase())
+		actor b  = PlayerRef.PlaceActorAtMe(outils.GetNPC(female).GetLeveledActorBase())
+
+		ostim.startscene(a, b)
+		return 
 	endif 
 
 	actor spawned = PlayerRef.PlaceActorAtMe(outils.GetNPC(with).GetLeveledActorBase())
@@ -204,8 +210,7 @@ Event CMD_info(string args)
 	Console(">")
 	Console(">	Excitement multipliers: " + ostim.getstimmult(ostim.GetDomActor()) + " | " + ostim.getstimmult(ostim.GetSubActor()) + " | " + ostim.getstimmult(ostim.GetThirdActor()))
 	Console(">")
-	Console(">")
-	Console(">	Current stimulation: " + ostim.GetCurrentStimulation(ostim.GetDomActor()) * ostim.GetStimMult(ostim.GetDomActor()) + " | " + ostim.GetCurrentStimulation(ostim.GetSubActor()) * ostim.GetStimMult(ostim.GetSubActor()) + " | " + ostim.GetCurrentStimulation(ostim.GetThirdActor()) * ostim.GetStimMult(ostim.GetThirdActor()) )
+	Console(">	Current stimulation/sec: " + ostim.GetCurrentStimulation(ostim.GetDomActor()) * ostim.GetStimMult(ostim.GetDomActor()) + " | " + ostim.GetCurrentStimulation(ostim.GetSubActor()) * ostim.GetStimMult(ostim.GetSubActor()) + " | " + ostim.GetCurrentStimulation(ostim.GetThirdActor()) * ostim.GetStimMult(ostim.GetThirdActor()) )
 	Console(">")
 	Console(">")
 	Console(">	Using automode: " + ostim.AIRunning)
