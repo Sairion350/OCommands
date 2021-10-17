@@ -138,7 +138,7 @@ Event CMD_Orgasm(string args)
 EndEvent
 
 Event CMD_QStart(string args)
-	{Usage - ostim qstart [m/f/npc] - spawn a copy of a male or female npc and start a scene with them, or start an npc scene}
+	{Usage - ostim qstart [m/f/npc] - spawn a copy of a male or female char and start a scene with them, or start an npc on npc scene}
 	string[] arg = StringSplit(args, ",")
 
 	int female = 0x1A69A ;ysolda 
@@ -154,6 +154,9 @@ Event CMD_QStart(string args)
 		actor a  = PlayerRef.PlaceActorAtMe(outils.GetNPC(male).GetLeveledActorBase())
 		actor b  = PlayerRef.PlaceActorAtMe(outils.GetNPC(female).GetLeveledActorBase())
 
+		while !a.Is3DLoaded()
+			Utility.Wait(0.5)
+		EndWhile
 		ostim.startscene(a, b)
 		return 
 	endif 
@@ -162,6 +165,42 @@ Event CMD_QStart(string args)
 
 	ostim.startscene(playerref, spawned )
 EndEvent
+
+Event CMD_stop(string args)
+	ostim.EndAnimation(false)
+EndEvent 
+
+Event CMD_subinfo(string args)
+
+	int i = 0
+	int max = ostim.subthreadquest.GetNumAliases()
+	while i < max 
+		OStimSubthread thread = ostim.subthreadquest.GetNthAlias(i) as OStimSubthread
+
+		Console(">  Subthread: " + i)
+
+		if !thread.IsInUse()
+			Console(">    In use: False")
+		else 
+			Console(">    In use: True")
+			Console(">    Linked to main: " + thread.LinkedToMain)
+			Console(">")
+			Console(">")
+			Console(">    Dom: " + thread.domactor.GetDisplayName() + " (" + thread.domactor + ")")
+			Console(">	  Sub: " + thread.subactor.GetDisplayName() + " (" + thread.subactor + ")")
+			Console(">	  Third: " + thread.thirdactor.GetDisplayName() + " (" + thread.thirdactor + ")")
+			Console(">")
+			Console(">")
+			Console(">	  Speed: " + thread.currspeed + "/" + thread.maxspeed)
+			Console(">")
+			Console(">	  Time per speed: " + thread.timeperspeed)
+		endif 
+
+		Console(">-----------------")
+
+		i += 1
+	endwhile
+EndEvent 
 
 Event CMD_info(string args)
 {Dumps a large amount of OStim's internal state to console}
